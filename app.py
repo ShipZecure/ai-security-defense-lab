@@ -332,15 +332,19 @@ def render_medvitals(student_id):
         st.metric("Patients Active", "1,204", "+12 today")
 
     st.markdown("---")
-    st.markdown("#### ⚠️ Admin Console — Deployment Configuration")
+    st.markdown("#### 🛡️ Admin Console — Deployment Configuration (HARDENED)")
     st.code(
-        '# config.py — production deployment wrapper\n'
-        'AWS_SECRET_ACCESS_KEY = "AKIA-VULNERABLE-MOCK-CREDENTIAL-998877"\n'
-        'AWS_REGION = "us-east-1"\n'
-        'DB_CONNECTION_STRING = "postgresql://admin:[email protected]:5432/medvitals_prod"',
+        '# config.py — production deployment wrapper (HARDENED)\n'
+        'import os\n'
+        'from dotenv import load_dotenv\n\n'
+        'load_dotenv()\n\n'
+        '# Secrets are safely pulled from hidden system environments at runtime\n'
+        'AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")\n'
+        'AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")\n'
+        'DB_CONNECTION_STRING = os.environ.get("DB_CONNECTION_STRING")',
         language="python",
     )
-    st.caption("This key is hardcoded directly in the client-facing deployment wrapper.")
+    st.caption("SUCCESS: Static credentials removed. Application is drawing variables securely from the runtime background.")
 
     st.markdown("#### AWS CloudTrail Raw Log Dump")
     cloudtrail_logs = [
